@@ -1,15 +1,11 @@
 import json
 import time
+import datetime
 
 from api import APIClient
 from uri import URI
 
-API_KEY = ""
-
-def _get_today():
-    today = time.time()
-    timeformat = "%d-%m-%Y"
-    return time.strftime(timeformat, time.gmtime(today))
+API_KEY = "ADD_YOUR_KEY_HERE"
 
 
 class GetVaccine(object):
@@ -18,7 +14,8 @@ class GetVaccine(object):
         self.api = APIClient()
         self.api.session()
         self.pin_codes = self.config["pin_code"]
-        self.today = _get_today()
+        self.time_delay = self.config["time_delay"]
+        print(self.pin_codes)
 
 
     def read_config(self):
@@ -28,14 +25,18 @@ class GetVaccine(object):
 
     def get_vaccine_by_pin(self):
         self.vaccine_list = []
-        for i in self.pin_codes:
-            params = {
-                "pincode": i,
-                "date": self.today
-            }
-            response, ret_code = self.api.get(URI.calendar_by_pin, params=params)
-            if response:
-                self.vaccine_list.append(json.loads(response))
+        newdate = datetime.date.today()
+        for days in range(4):
+            str_date = newdate.strftime("%d-%m-%Y")
+            for i in self.pin_codes:
+                params = {
+                    "pincode": i,
+                    "date": str_date
+                }
+                response, ret_code = self.api.get(URI.calendar_by_pin, params=params)
+                if ret_code == 200:
+                    self.vaccine_list.append(json.loads(response))
+                newdate = newdate + datetime.timedelta(days=7)
 
         
     def find_avail_vaccine(self):
@@ -74,14 +75,28 @@ class GetVaccine(object):
         pincode_avail = []
         for data in self.avail_data:
             pincode_avail.append(data["pincode"])
+        pincode_avail = set(pincode_avail)
         if pincode_avail:
             from pushbullet import Pushbullet
             pb = Pushbullet(API_KEY)
             push = pb.push_note("Vaccine available", f"{pincode_avail}")
 
 
+
+
+
 if __name__ == "__main__":
+    import sched
+    import time
+
+    event_schedule = sched.scheduler(time.time, time.sleep)
     gv = GetVaccine()
-    gv.find_avail_vaccine()
-    gv.print_slots()
-    gv.notify_to_my_phone()
+
+    def main():
+        gv.find_avail_vaccine()
+        gv.print_slots()
+        gv.notify_to_my_phone()
+        event_schedule.enter(gv.time_delay, 1, main)
+
+    event_schedule.enter(30, 1, main)
+    event_schedule.run()
