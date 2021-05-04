@@ -80,11 +80,12 @@ class GetVaccine(object):
             vaccine_types = []
             for session in data["session"]:
                 vaccine_types.append(session["type"])
+            vaccine_types = set(vaccine_types)
             data_to_notify.append(f"{data['name']} - {','.join(vaccine_types)}")
         if data_to_notify:
             from pushbullet import Pushbullet
             pb = Pushbullet(API_KEY)
-            info = "\n".join(data_to_notify)
+            info = "\n".join(set(data_to_notify))
             push = pb.push_note("Vaccine available", info)
 
 
