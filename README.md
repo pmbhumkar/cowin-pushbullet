@@ -27,4 +27,4 @@ Run the code as
 `python3 get_vaccine.py`
 
 ## Sample Screenshot ##
-![name-of-you-image](https://github.com/pmbhumkar/cowin-pushbullet/blob/master/Screenshot_20210504-161917_Nova%20Launcher.jpg)
+![Notification Screenshot](https://github.com/pmbhumkar/cowin-pushbullet/blob/master/Screenshot_20210504-164141_Nova%20Launcher.jpg)
