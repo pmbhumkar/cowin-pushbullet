@@ -15,6 +15,7 @@ class GetVaccine(object):
         self.api.session()
         self.pin_codes = self.config["pin_code"]
         self.time_delay = self.config["time_delay"]
+        self.age = self.config["age"]
         print(self.pin_codes)
 
 
@@ -49,13 +50,15 @@ class GetVaccine(object):
                     "name": center["name"],
                     "fee": center["fee_type"],
                     "session": [],
-                    "pincode": center["pincode"]
+                    "pincode": center["pincode"],
                 }
                 for session in center["sessions"]:
-                    if session["available_capacity"] > 0:
+                    if session["available_capacity"] > 0 and \
+                    session["min_age_limit"] in self.age:
                         center_data["session"].append({
                             "slot": session["slots"],
-                            "avail": session["available_capacity"]
+                            "avail": session["available_capacity"],
+                            "type": session["vaccine"]
                         })
                 if center_data["session"]:
                     self.avail_data.append(center_data)
@@ -66,22 +69,23 @@ class GetVaccine(object):
                 print(f"Center: {data['name']}")
                 print(f"Fees: {data['fee']}")
                 for session in data["session"]:
-                    print(f"\tAvailable vaccine: {session['avail']}\tTime Slot: {session['slot']}")
+                    print(f"\tAvailable vaccine: {session['type']}\t{session['avail']}\tTime Slot: {session['slot']}")
         else:
             print(f"No vaccine available at {self.pin_codes}")
 
 
     def notify_to_my_phone(self):
-        pincode_avail = []
+        data_to_notify = []
         for data in self.avail_data:
-            pincode_avail.append(data["pincode"])
-        pincode_avail = set(pincode_avail)
-        if pincode_avail:
+            vaccine_types = []
+            for session in data["session"]:
+                vaccine_types.append(session["type"])
+            data_to_notify.append(f"{data['name']} - {','.join(vaccine_types)}")
+        if data_to_notify:
             from pushbullet import Pushbullet
             pb = Pushbullet(API_KEY)
-            push = pb.push_note("Vaccine available", f"{pincode_avail}")
-
-
+            info = "\n".join(data_to_notify)
+            push = pb.push_note("Vaccine available", info)
 
 
 
@@ -98,5 +102,5 @@ if __name__ == "__main__":
         gv.notify_to_my_phone()
         event_schedule.enter(gv.time_delay, 1, main)
 
-    event_schedule.enter(30, 1, main)
+    event_schedule.enter(2, 1, main)
     event_schedule.run()
