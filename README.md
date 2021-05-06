@@ -11,11 +11,15 @@ User will receive a push bullet for available slot
 * Copy this access token as this will be needed in the code
 
 
-### Install pushbullet library ###
-Install pushbullet library using `pip3 install pushbullet.py`
+### Packages dependencies ###
+* Pushbullet
+	* Install pushbullet library using `pip3 install pushbullet.py`
+* fake-headers
+	* Install using `pip3 install fake-headers`
+
+_Note: Added requirements.py file that can be used to complete dependencies installation_  
+`pip3 install -r requirements.txt`
  
-
-
 
 ## How to use ##
 Edit config.json file for following
