@@ -17,7 +17,7 @@ User will receive a push bullet for available slot
 * fake-headers
 	* Install using `pip3 install fake-headers`
 
-_Note: Added requirements.py file that can be used to complete dependencies installation_  
+_Note: Added requirements.txt file that can be used to complete dependencies installation_  
 `pip3 install -r requirements.txt`
  
 
