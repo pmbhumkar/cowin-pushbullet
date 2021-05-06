@@ -18,10 +18,11 @@ Install pushbullet library using `pip install pushbullet.py`
 
 
 ## How to use ##
-Add your pin code preferrences in config.json, pin_code data
-
-Add your pushbullet access_token in get_vaccine.py
-`API_KEY = "ADD_YOUR_API_KEY_HERE"`
+Edit config.json file for following
+* api_key: Pushbullet access_token
+* pincode: Your preferrenced area pincode in a list
+* age: add 18 for 18+ vaccines, and 45 for 45+ vaccines in a list (both can also be added for all search)
+* timeday: The recurrence of the script execution, in seconds
 
 Run the code as
 `python3 get_vaccine.py`
