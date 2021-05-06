@@ -11,17 +11,22 @@ User will receive a push bullet for available slot
 * Copy this access token as this will be needed in the code
 
 
-### Install pushbullet library ###
-Install pushbullet library using `pip install pushbullet.py`
+### Packages dependencies ###
+* Pushbullet
+	* Install pushbullet library using `pip3 install pushbullet.py`
+* fake-headers
+	* Install using `pip3 install fake-headers`
+
+_Note: Added requirements.py file that can be used to complete dependencies installation_  
+`pip3 install -r requirements.txt`
  
 
-
-
 ## How to use ##
-Add your pin code preferrences in config.json, pin_code data
-
-Add your pushbullet access_token in get_vaccine.py
-`API_KEY = "ADD_YOUR_API_KEY_HERE"`
+Edit config.json file for following
+* api_key: Pushbullet access_token
+* pincode: Add your preferrenced area pincode in a list
+* age: Add 18 for 18+ vaccines, and 45 for 45+ vaccines in a list (both can also be added for all search)
+* timeday: The recurrence of the script execution, in seconds
 
 Run the code as
 `python3 get_vaccine.py`
