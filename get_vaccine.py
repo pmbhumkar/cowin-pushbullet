@@ -5,14 +5,13 @@ import datetime
 from api import APIClient
 from uri import URI
 
-API_KEY = "ADD_YOUR_KEY_HERE"
-
 
 class GetVaccine(object):
     def __init__(self):
         self.read_config()
         self.api = APIClient()
         self.api.session()
+        self.api_key = self.config["api_key"]
         self.pin_codes = self.config["pin_code"]
         self.time_delay = self.config["time_delay"]
         self.age = self.config["age"]
@@ -35,6 +34,7 @@ class GetVaccine(object):
                     "date": str_date
                 }
                 response, ret_code = self.api.get(URI.calendar_by_pin, params=params)
+                print(ret_code)
                 if ret_code == 200:
                     self.vaccine_list.append(json.loads(response))
                 newdate = newdate + datetime.timedelta(days=7)
@@ -50,7 +50,7 @@ class GetVaccine(object):
                     "name": center["name"],
                     "fee": center["fee_type"],
                     "session": [],
-                    "pincode": center["pincode"],
+                    "pincode": center["pincode"]
                 }
                 for session in center["sessions"]:
                     if session["available_capacity"] > 0 and \
@@ -84,7 +84,7 @@ class GetVaccine(object):
             data_to_notify.append(f"{data['name']} - {','.join(vaccine_types)}")
         if data_to_notify:
             from pushbullet import Pushbullet
-            pb = Pushbullet(API_KEY)
+            pb = Pushbullet(self.api_key)
             info = "\n".join(set(data_to_notify))
             push = pb.push_note("Vaccine available", info)
 
