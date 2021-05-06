@@ -12,7 +12,7 @@ User will receive a push bullet for available slot
 
 
 ### Install pushbullet library ###
-Install pushbullet library using `pip install pushbullet.py`
+Install pushbullet library using `pip3 install pushbullet.py`
  
 
 
@@ -20,8 +20,8 @@ Install pushbullet library using `pip install pushbullet.py`
 ## How to use ##
 Edit config.json file for following
 * api_key: Pushbullet access_token
-* pincode: Your preferrenced area pincode in a list
-* age: add 18 for 18+ vaccines, and 45 for 45+ vaccines in a list (both can also be added for all search)
+* pincode: Add your preferrenced area pincode in a list
+* age: Add 18 for 18+ vaccines, and 45 for 45+ vaccines in a list (both can also be added for all search)
 * timeday: The recurrence of the script execution, in seconds
 
 Run the code as
